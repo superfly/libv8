@@ -1,5 +1,7 @@
 #!/bin/bash -ex
 
+cd v8
+
 gn gen out.gn/lib --args='
     is_debug = false
     target_cpu = "x64"
