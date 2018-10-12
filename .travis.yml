@@ -13,6 +13,8 @@ env:
 cache:
   ccache: true
 
+if: tag IS present
+
 install:
   - |-
   # Install ccache (if necessary) and set it up.
