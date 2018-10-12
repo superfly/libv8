@@ -1,0 +1,29 @@
+language: c++
+matrix:
+  include:
+  - os: linux
+    sudo: required
+  - os: osx
+
+env:
+  global:
+  - CCACHE_CPP2=yes
+  - CCACHE_SLOPPINESS=time_macros
+
+cache:
+  ccache: true
+
+install:
+  - |-
+  # Install ccache (if necessary) and set it up.
+  if [[ "$TRAVIS_OS_NAME" == "osx" && ! $(which ccache) ]]; then
+    brew install ccache
+    export PATH="/usr/local/opt/ccache/libexec:$PATH"
+  fi
+  ccache --version | head -n 1
+  ccache --max-size=5G
+  - ./download_v8.sh
+  - ./checkout_v8.sh
+
+script:
+  - ./compile_v8.sh
