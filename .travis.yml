@@ -16,15 +16,15 @@ cache:
 if: tag IS present
 
 install:
-  - |-
-  # Install ccache (if necessary) and set it up.
-  if [[ "$TRAVIS_OS_NAME" == "osx" && ! $(which ccache) ]]; then
-    brew install ccache
-    export PATH="/usr/local/opt/ccache/libexec:$PATH"
-  fi
-  ccache --version | head -n 1
-  ccache --max-size=5G
-  - git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
+  - |
+    # Install ccache (if necessary) and set it up.
+    if [[ "$TRAVIS_OS_NAME" == "osx" && ! $(which ccache) ]]; then
+      brew install ccache
+      export PATH="/usr/local/opt/ccache/libexec:$PATH"
+    fi
+    ccache --version | head -n 1
+    ccache --max-size=5G
+    - git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
   - export PATH="$(pwd)/depot_tools:$PATH"
   - fetch v8
   - git fetch origin ${TRAVIS_TAG}
