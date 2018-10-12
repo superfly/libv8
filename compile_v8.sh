@@ -18,3 +18,5 @@ gn gen out.gn/lib --args='
     v8_use_external_startup_data = false
     v8_use_snapshot = true'
 ninja -C out.gn/lib v8_monolith
+
+cd ..

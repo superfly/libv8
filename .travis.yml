@@ -4,32 +4,42 @@ matrix:
   - os: linux
     sudo: required
   - os: osx
-
 env:
   global:
   - CCACHE_CPP2=yes
   - CCACHE_SLOPPINESS=time_macros
-
+  - V8_ARCHIVE_NAME=v8-${TRAVIS_OS_NAME}-x64.tar.gz
 cache:
   ccache: true
-
 if: tag IS present
-
 install:
-  - |
-    # Install ccache (if necessary) and set it up.
-    if [[ "$TRAVIS_OS_NAME" == "osx" && ! $(which ccache) ]]; then
-      brew install ccache
-      export PATH="/usr/local/opt/ccache/libexec:$PATH"
-    fi
-    ccache --version | head -n 1
-    ccache --max-size=5G
-  - git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
-  - export PATH="$(pwd)/depot_tools:$PATH"
-  - fetch v8
-  - git fetch origin ${TRAVIS_TAG}
-  - git checkout ${TRAVIS_TAG}
-  - gclient sync
-
+- |
+  # Install ccache (if necessary) and set it up.
+  if [[ "$TRAVIS_OS_NAME" == "osx" && ! $(which ccache) ]]; then
+    brew install ccache
+    export PATH="/usr/local/opt/ccache/libexec:$PATH"
+  fi
+  ccache --version | head -n 1
+  ccache --max-size=5G
+- git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
+- export PATH="$(pwd)/depot_tools:$PATH"
+- fetch v8
+- git fetch origin ${TRAVIS_TAG}
+- git checkout ${TRAVIS_TAG}
+- gclient sync
 script:
-  - ./compile_v8.sh
+- "./compile_v8.sh"
+
+before_deploy:
+  - tar czf ${V8_ARCHIVE_NAME} v8/out.gn/lib/obj/*.a v8/include/
+
+deploy:
+  provider: releases
+  overwrite: true
+  api_key:
+    secure: DpfmH2l6z4TLtGmzp9jtK9nhBYAJV8+siNtdtx844qg2zePlGPunSauSQiw4gfFyx+nWl+RyIGX/Jd5IP8mWHY5JlrfgCWvyZoNl2XULbxrkNnAAqfFPv1OQVD+12NFQOIGOCmN9LMZPEX34zKJoQG+ImJgs/o3s9vO2DmvswMBPEPPtP6SEkVKw2t5eefX7ZgwO5mKblm6YVXzhyDS7qFEMkgBjNY0dYYV5eZJLejLsbRTa1KL2HMmcQrrWA5PD5W8tf9ePmaL3YIHSgnpXZLUrhZJ9DicG2eHMDpxgBbAoS1qrL3dWjcr09v5UERY2k3tW2UKTv8x3CFE8Ayq8BOMz+2GIQ2e7LgEXoqVpelWAJcrUI5IyrFyhK6LY6y4u7xlJTAPKy4KV6fkhBqSYnIXaIHITfZo/G/mvhajqXscMU4PG8eCzp66AKgtoJUdEl4EKAx4Qk7oE+VyM5nzM8fzuh7pmilBkSPeLyNRj4ujhptRfmmoq9utKO3C3Jovb0+7N4sbZi50s9YoSertTf9pnHS4OSX1biRPOupxsrf3ncF6qga88rIBGs0/LR14lP0TdOdZYtMh4QMYz5FWa23B6omsoMQwL2Of6hNV4chRDOYkVkKxebMUvaMusLKthvXnss0fLZAhqe4zLP83Q5+fMQy+73MzeXFHjQ0IzLh8=
+  file: ${V8_ARCHIVE_NAME}
+  skip_cleanup: true
+  on:
+    tags: true
+    repo: superfly/libv8
