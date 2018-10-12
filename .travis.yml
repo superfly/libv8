@@ -22,8 +22,12 @@ install:
   fi
   ccache --version | head -n 1
   ccache --max-size=5G
-  - ./download_v8.sh
-  - ./checkout_v8.sh
+  - git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
+  - export PATH="$(pwd)/depot_tools:$PATH"
+  - fetch v8
+  - git fetch origin ${TRAVIS_TAG}
+  - git checkout ${TRAVIS_TAG}
+  - gclient sync
 
 script:
   - ./compile_v8.sh
