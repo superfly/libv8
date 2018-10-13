@@ -1,10 +1,10 @@
 #!/bin/bash -ex
 
-cd v8
-
 gn gen out.gn/lib --args='
     is_debug = false
     target_cpu = "x64"
+    is_cfi = false
+    use_thin_lto = false
     cc_wrapper = "ccache"
     is_official_build = true
     v8_deprecation_warnings = false
@@ -18,5 +18,3 @@ gn gen out.gn/lib --args='
     v8_use_external_startup_data = false
     v8_use_snapshot = true'
 ninja -C out.gn/lib v8_monolith
-
-cd ..
