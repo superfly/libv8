@@ -31,6 +31,7 @@ install:
 - cd ..
 
 script:
+- cd v8
 - |
   gn gen out.gn/lib --args='
     is_debug = false
@@ -50,6 +51,7 @@ script:
     v8_use_external_startup_data = false
     v8_use_snapshot = true'
 - ninja -C out.gn/lib v8_monolith
+- cd ..
 
 before_deploy:
   - tar czf ${V8_ARCHIVE_NAME} v8/out.gn/lib/obj/*.a v8/include/
