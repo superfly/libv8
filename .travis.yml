@@ -36,7 +36,6 @@ script:
   gn gen out.gn/lib --args='
     is_debug = false
     target_cpu = "x64"
-    is_cfi = false
     cc_wrapper = "ccache"
     is_official_build = true
     v8_deprecation_warnings = false
@@ -46,7 +45,6 @@ script:
     v8_extra_library_files = []
     v8_imminent_deprecation_warnings = false
     v8_monolithic = true
-    v8_static_library = true
     v8_untrusted_code_mitigations = false
     v8_use_external_startup_data = false
     v8_use_snapshot = true'
