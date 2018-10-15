@@ -32,7 +32,49 @@ install:
 
 script:
 - cd v8
-- gn gen out.gn/lib --args=''"$(cat ../args.${TRAVIS_OS_NAME}.gn)"''
+- |
+  if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+    gn gen out.gn/lib --args='is_debug = false
+      target_cpu = "x64"
+      cc_wrapper = "ccache"
+      is_cfi = false
+      is_official_build = true
+      v8_deprecation_warnings = false
+      v8_enable_gdbjit = false
+      v8_enable_i18n_support = false
+      v8_experimental_extra_library_files = []
+      v8_extra_library_files = []
+      v8_imminent_deprecation_warnings = false
+      v8_monolithic = true
+      v8_untrusted_code_mitigations = false
+      v8_use_external_startup_data = false
+      v8_use_snapshot = true'
+  else
+    gn gen out.gn/lib --args='target_cpu = "x64"
+      cc_wrapper = "ccache"
+      is_cfi = false
+      is_official_build = true
+      v8_deprecation_warnings = false
+      v8_enable_gdbjit = false
+      v8_enable_i18n_support = false
+      v8_experimental_extra_library_files = []
+      v8_extra_library_files = []
+      v8_imminent_deprecation_warnings = false
+      v8_monolithic = true
+      v8_untrusted_code_mitigations = false
+      v8_use_external_startup_data = false
+      v8_use_snapshot = true
+      is_clang=false
+      use_sysroot=false
+      treat_warnings_as_errors=false
+      v8_monolithic=true
+      use_drfuzz=false
+      use_libfuzzer=false
+      v8_enable_test_features=""
+      use_glib=false
+      use_custom_libcxx=false
+      use_custom_libcxx_for_host=false'
+  fi
 - ninja -C out.gn/lib v8_monolith
 - cd ..
 
