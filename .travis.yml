@@ -32,7 +32,7 @@ install:
 
 script:
 - cd v8
-- gn gen out.gn/lib -f args.${TRAVIS_OS_NAME}.gn
+- gn gen -f args.${TRAVIS_OS_NAME}.gn out.gn/lib
 - ninja -C out.gn/lib v8_monolith
 - cd ..
 
