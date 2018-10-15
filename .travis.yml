@@ -29,7 +29,7 @@ install:
 - git checkout ${TRAVIS_TAG}
 - gclient sync
 - cd ..
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then apt-get install libatspi2.0-dev; fi
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install libatspi2.0-dev; fi
 
 script:
 - cd v8
