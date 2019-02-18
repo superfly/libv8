@@ -32,6 +32,7 @@ addons:
       - gcc-5
       - g++-5
       - libatspi2.0-dev
+      - g++-arm-linux-gnueabihf
 
 
 install:
