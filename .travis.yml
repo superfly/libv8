@@ -3,9 +3,11 @@ matrix:
   include:
   - os: linux
     sudo: required
+    dist: xenial
     env: V8_BUILD_ARCH=amd64
   - os: linux
     sudo: required
+    dist: xenial
     env: V8_BUILD_ARCH=armhf
   - os: osx
     env: V8_BUILD_ARCH=amd64
@@ -33,6 +35,9 @@ addons:
       - g++-5
       - libatspi2.0-dev
       - g++-arm-linux-gnueabihf
+      - gcc-arm-linux-gnueabihf
+      - g++-multilib-arm-linux-gnueabihf
+      - libc6-armhf-cross
 
 
 install:
