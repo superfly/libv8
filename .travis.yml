@@ -2,13 +2,18 @@ language: c++
 matrix:
   include:
   - os: linux
+    arch: amd64
+    sudo: required
+  - os: linux
+    arch: armhf
     sudo: required
   - os: osx
+    arch: amd64
 env:
   global:
   - CCACHE_CPP2=yes
   - CCACHE_SLOPPINESS=time_macros
-  - V8_ARCHIVE_NAME=v8-${TRAVIS_OS_NAME}-x64.tar.gz
+  - V8_ARCHIVE_NAME=v8-${TRAVIS_OS_NAME}-${TRAVIS_ARCH_NAME}.tar.gz
 cache:
   ccache: true
 if: tag IS present
@@ -49,7 +54,7 @@ install:
 
 script:
 - cd v8
-- gn gen out.gn/lib --args=''"$(cat ../args.${TRAVIS_OS_NAME}.gn)"''
+- gn gen out.gn/lib --args=''"$(cat ../args.${TRAVIS_OS_NAME}.${TRAVIS_ARCH_NAME}.gn)"''
 - ninja -C out.gn/lib v8_monolith
 - cd ..
 
